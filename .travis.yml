@@ -1,0 +1,10 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t gnupa/travis-docker-test .
+
+script:
+  - docker run gnupa/travis-docker-test /node_modules/grunt/bin/grunt test
