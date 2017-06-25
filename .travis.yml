@@ -1,5 +1,10 @@
 sudo: required
 
+env:
+  global:
+    - secure: "hwzVImFsMl6WDghsfCMlTHCNvbCZVFdd6MSQkIuBOahlDyhnzNP+OuhDTeJ8sn0p4Udsd2MEo6hdkWbHOjn3VAi7YATJv8pN0YlaHLhcwRfDbksDPEO+4RlTI7SlbEda693zYbQZDKHXz5/7ba3/t7yrmku6U2y9YY+9oWZSZOOZEEjQvxp5PK5IJyAu47fPklT32wyncVEDE5nxyt4EodfRCrAjRw+fKomL4KKC3m1Q4mwMCfKbSjDOo6XMfYO3lcaFZxOTaGvav8GphXIfL987R6Zmdi8hXcqDRwU6XoMV+QYfLd/wPmuYsfuz0rO+0lqJ4PvroVPceu59Ur3i7WoEhDqAqn68+o7wtL01vAfBPLUQkXcDzVZvTxbwiZccIy5EcYXwTLPpLYKfMPK3XZM2rTq2vJzYLWquGzlYZeyx4XzLuem23//foKuA+/m7laVS8RMtTzLFYLBJ8Vi4oCEY2zzvcC0I+7qJatCvO7cxiyf+DFQ1yODjDdv6QBlf1GFyiGvHnk1MeW3NHKg02HMvbqSRyo6nA+hJYlYK23IDEUHLHbmMkX4XSWUnUh08cHz7WLnlEqdq7+1jRQA1a+qFL2kXMHQ2umNmQHc21fkAuTdhb5CyGXWR2VX03NXvDFek035G+6hws6iFfHXLYxsQNMQHEE6SF1I77WXck10="
+    - secure: "bVmW3EnjLhOi0DRfOltpfc2P7pVbqtP4MkcGftSHtSxsuYotHhBWtMgAfivm6AosnQ+FBFR2i4ZP40koLuZjJRg6laEqiSatw0GBxMRfhtrrnadf/oiAf0wSi9Z4gaqH+Za+Zv2Dd7aDm/KNKvNg1M91WAtZfmqgD1yRXLACOFgtloQ8kyfxOhmC9vClg0NTQhY+d/q+atkcAkh1OGc2PriRK8jN3h3KJklSphluUZ8k/CSlpw1/av3AflfSMIkRox2IbvTJ+MInnVN1ID5WOV/CQ3uegsJ34KELQ45jlGFIYvLMLuTV7cqYJFxqj1LdWtVZR3jSVswe9MrqJF7VzvwEwxsiqDXeAPJeK/XzsDn4Popi8S+eQ0JZR0SwOxaGU3xBC77i57cE46o+ocCMPJZDEoVgD+R09Mt5NtSt9U//1fzXtFwpNDf6snKl/4BZqNfUxNUuICVJR3nQfqcykhfcmPiyr4GkB/1BT79B2k0GzbM1nCn1mNhalPctbG5O4YYHhktjOdZggUDV0AlUrEA3T4Cf5lEUTTjOkm1ZkfIsiYEf21b9YtvcKbCCT1QrfvZeCLPe0rT4ACtay5kd92+grwpJtX2ocLUkleXWh3sXIAISfGpV+2rwW+DFhQHqG49xjhKgq/v6hlsqngOHziMNr6HoOhqnCahp6rCeSXY="
+
 services:
   - docker
 
@@ -8,3 +13,9 @@ before_install:
 
 script:
   - docker run gnupa/travis-docker-test /node_modules/grunt/bin/grunt test
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push $DOCKER_USERNAME/travis-docker-test;
+    fi
